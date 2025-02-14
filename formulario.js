@@ -1,90 +1,57 @@
 // cambie el scope de la variable
 const formulario = document.getElementById("formulario");
 
-// coloque un nombre al parametro mas descriptivo
+// coloqué un nombre al parametro mas descriptivo
 formulario.onsubmit = function (event) {
-    // la funcion prevent estaba mal escrita
-    event.preventDefault();
+	// la funcion prevent estaba mal escrita
+	event.preventDefault();
 
-    /*
+	/*
     cambie a nombres mas descriptivos y el scope de las variables
-    obtengo los valores de name y age ya que no necesito el elemento completo
+    obtengo los valores de name,age y nationality ya que no necesito el elemento completo
     y evito crear variables innecesarias
     */
 	const name = formulario.elements[0].value;
 	const age = formulario.elements[1].value;
-	const nationality = formulario.elements[2];
-    
+	const nationality = formulario.elements[2].value;
 
-	var i = na.selectedIndex;
-	var nacionalidad = na.options[i].value;
-	console.log(nombre, edad);
-	console.log(nacionalidad);
+	console.log(name, age);
+	console.log(nationality);
 
-	if (nombre.length === 0) {
-		n.classList.add("error");
-	}
-	if (edad < 18 || edad > 120) {
-		e.classList.add("error");
+	/*
+    hago un refactor y delego la responsabilidad de validacion y modularizo la creacion
+    de los elementos que contienen a la lista y como se añaden elementos a esta
+    */
+
+	if (!isValidPerson(name, age)) {
+		return; //TODO: mostrar mensaje de error en los inputs
 	}
 
-	if (nombre.length > 0 && edad > 18 && edad < 120) {
-		agregarInvitado(nombre, edad, nacionalidad);
-	}
+	//createInvitedList();
+	agregarInvitado(name, age, nationality);
 };
 
-var botonBorrar = document.createElement("button");
-botonBorrar.textContent = "Eliminar invitado";
-botonBorrar.id = "boton-borrar";
-var corteLinea = document.createElement("br");
-document.body.appendChild(corteLinea);
-document.body.appendChild(botonBorrar);
+//meti la creacion de elementos en la misma funcion ademas estaba repetido
 
 function agregarInvitado(nombre, edad, nacionalidad) {
-	if (nacionalidad === "ar") {
-		nacionalidad = "Argentina";
-	} else if (nacionalidad === "mx") {
-		nacionalidad = "Mexicana";
-	} else if (nacionalidad === "vnzl") {
-		nacionalidad = "Venezolana";
-	} else if (nacionalidad === "per") {
-		nacionalidad = "Peruana";
-	}
+	//elimine validacion innecesaria
 
-	var lista = document.getElementById("lista-de-invitados");
-
-	var elementoLista = document.createElement("div");
-	elementoLista.classList.added("elemento-lista");
+	const lista = document.getElementById("lista-de-invitados");
+    const elementoLista = document.createElement("div");
+	//elementoLista.classList.added("elemento-lista");
+    elementoLista.id = "elemento-lista";
 	lista.appendChild(elementoLista);
 
-	var spanNombre = document.createElement("span");
-	var inputNombre = document.createElement("input");
-	var espacio = document.createElement("br");
-	spanNombre.textContent = "Nombre: ";
-	inputNombre.value = nombre;
-	elementoLista.appendChild(spanNombre);
-	elementoLista.appendChild(inputNombre);
-	elementoLista.appendChild(espacio);
-
-	function crearElemento(descripcion, valor) {
-		var spanNombre = document.createElement("span");
-		var inputNombre = document.createElement("input");
-		var espacio = document.createElement("br");
-		spanNombre.textContent = descripcion + ": ";
-		inputNombre.value = valor;
-		elementoLista.appendChild(spanNombre);
-		elementoLista.appendChild(inputNombre);
-		elementoLista.appendChild(espacio);
-	}
+    //elimine funciones internas y codigo repetido
 
 	crearElemento("Nombre", nombre);
 	crearElemento("Edad", edad);
 	crearElemento("Nacionalidad", nacionalidad);
 
-	var botonBorrar = document.createElement("button");
+	const botonBorrar = document.createElement("button");
 	botonBorrar.textContent = "Eliminar invitado";
 	botonBorrar.id = "boton-borrar";
-	var corteLinea = document.createElement("br");
+	const corteLinea = document.createElement("br");
 	elementoLista.appendChild(corteLinea);
 	elementoLista.appendChild(botonBorrar);
 
@@ -92,4 +59,40 @@ function agregarInvitado(nombre, edad, nacionalidad) {
 		// this.parentNode.style.display = 'none';
 		botonBorrar.parentNode.remove();
 	};
+}
+
+function isValidPerson(name, age) {
+	let regEx = /[0-9!@#$%^&*(),.?":{}|<>]/;
+	if (name.match(regEx)) {
+		alert("El nombre no puede contener numeros ni caracteres especiales");
+		return false;
+	}
+
+	if (age < 18 || age > 120) {
+		alert("La edad debe ser mayor a 18 y menor a 120");
+		return false;
+	}
+
+	return true;
+}
+
+function createInvitedList() {
+	const botonBorrar = document.createElement("button");
+	botonBorrar.textContent = "Eliminar invitado";
+	botonBorrar.id = "boton-borrar";
+	const corteLinea = document.createElement("br");
+	document.body.appendChild(corteLinea);
+	document.body.appendChild(botonBorrar);
+}
+
+function crearElemento(descripcion, valor) {
+    const spanNombre = document.createElement("span");
+    const inputNombre = document.createElement("input");
+    const espacio = document.createElement("br");
+    spanNombre.textContent = descripcion + ": ";
+    inputNombre.value = valor;
+    const elementoLista = document.getElementById("elemento-lista");
+    elementoLista.appendChild(spanNombre);
+    elementoLista.appendChild(inputNombre);
+    elementoLista.appendChild(espacio);
 }
