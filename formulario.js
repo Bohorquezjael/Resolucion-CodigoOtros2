@@ -1,14 +1,20 @@
-var formulario = document.querySelector("#form");
+// cambie el scope de la variable
+const formulario = document.getElementById("formulario");
 
-formulario.onsubmit = function (e) {
-	e.prevent();
+// coloque un nombre al parametro mas descriptivo
+formulario.onsubmit = function (event) {
+    // la funcion prevent estaba mal escrita
+    event.preventDefault();
 
-	var n = formulario.elements[0];
-	var e = formulario.elements[1];
-	var na = formulario.elements[2];
-
-	var nombre = n.value;
-	var edad = e.value;
+    /*
+    cambie a nombres mas descriptivos y el scope de las variables
+    obtengo los valores de name y age ya que no necesito el elemento completo
+    y evito crear variables innecesarias
+    */
+	const name = formulario.elements[0].value;
+	const age = formulario.elements[1].value;
+	const nationality = formulario.elements[2];
+    
 
 	var i = na.selectedIndex;
 	var nacionalidad = na.options[i].value;
